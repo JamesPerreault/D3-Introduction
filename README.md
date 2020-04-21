@@ -34,7 +34,7 @@ Table Of Contents
 -   [Javascript Conventions](#javascript-conventions)
 -   [D3 Preliminaries](#d3-preliminaries)
 -   [Your First D3 Visualization](#your-first-d3-visualization)
--   [Bar charts](#bar-charts])
+-   [Bar charts](#bar-charts)
 -   [Callbacks](#callbacks)
 -   [Additional utilities](#additional-utilities)
 
