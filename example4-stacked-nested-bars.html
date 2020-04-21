@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Nested and Stacked Historgram</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+var margin = {
+    top: 20,
+    right: 20,
+    bottom: 60,
+    left: 50
+},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+var y = d3.scaleBand()
+    .rangeRound([0, height] );
+
+var x = d3.scaleLinear()
+    .range([0, width]);
+
+var yAxis = d3.axisLeft()
+    .scale(y)
+
+var xAxis = d3.axisBottom()
+    .scale(x) ;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom) 
+    .append("g") 
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
+
+d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom) 
+    .append("g") 
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("netflow.tsv", d3.autoType).then( function(data) {
+
+
+   var nested = d3.nest()
+      .key(function(d) {return d.proto + ":" + d.dport} )
+      .key(function(d) {return d.dip} )
+      .rollup(function(v) { return v.length; })
+      .entries(data); 
+ 
+    var counts = nestToStack(nested) ;
+  
+    x.domain([0, d3.max(counts, function(d) {
+        return d.x[1];
+    })]);
+    y.domain(counts.map(function(d) {
+        return d.y;
+    }));
+
+    console.log(nested) 
+    console.log(counts) 
+
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+     ;
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+
+   var elements = svg.selectAll(".graphobj")
+        .data(counts)
+        .enter()
+        .append("rect")
+        .attr("class", "graphobj")
+        .attr("y", function(d) {
+            return y(d.y);
+        })
+        .attr("height", y.bandwidth())
+        .attr("width", function(d) {
+            return x(d.x[1])-x(d.x[0]);
+        })
+        .attr("x", function(d) {
+            return x(d.x[0]);
+        })
+        .attr("fill", function(d, i) {
+            return color(d.label);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        }) ;
+
+
+});
+
+
+function nestToStack(nest) {
+  var stacked = [] ;
+  nest.forEach( function(d) {
+     var x0 = 0 ;
+     d.values.forEach( function(f)  {
+        var obj = { y: d.key } ;
+        obj.x = [ x0, x0+ f.value ] ;
+        x0 += f.value ;
+        obj.label = f.key ;
+        stacked.push(obj) ;
+     } ) ;
+  } );
+  return stacked ;
+}
+
+
+
+
+</script>
+
+</html>

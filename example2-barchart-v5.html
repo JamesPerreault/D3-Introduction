@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Bar Chart</title>
+    </style>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+var margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 40
+},
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+
+var y = d3.scaleBand()
+    .rangeRound([0, height]);
+
+var x = d3.scaleLinear()
+    .range([0, width]);
+
+var xAxis = d3.axisBottom()
+    .scale(x) ;
+
+var yAxis = d3.axisLeft()
+    .scale(y) ;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("data.tsv", d3.autoType).then( function( data) {
+    x.domain([0, d3.max(data, function(d) {
+        return d.frequency;
+    })]);
+    y.domain(data.map(function(d) {
+        return d.letter;
+    }));
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .style('fill', 'none')
+        .style('stroke', 'black');
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .style('fill', 'none')
+        .style('stroke', 'black');
+
+    var elements = svg.selectAll(".graphobjs")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "graphobjs") 
+        .attr("y", function(d) {
+             return y(d.letter);
+         })
+        .attr("height", y.bandwidth())
+        .attr("x", 0)
+        .attr("width", function(d) {
+            return x(d.frequency);
+        })
+        .attr("fill", function(d, i) {
+            return color(i);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        })
+        ;
+
+});
+
+</script>
+
+</html>

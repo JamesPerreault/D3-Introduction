@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Scatter plot D3 version 5</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+
+</body>
+
+<script>
+
+var margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 50
+},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+var x = d3.scalePoint()
+    .range([0, width], .0 );
+
+var y = d3.scaleLinear()
+    .range([height, 0]);
+
+var yAxis = d3.axisLeft()
+    .scale(y)
+
+var xAxis = d3.axisBottom()
+    .scale(x) ;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom) 
+    .append("g") 
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
+
+
+d3.tsv("data.tsv", d3.autoType).then ( function( data) {
+    console.log(data)
+    y.domain([0, d3.max(data, function(d) {
+        return d.frequency;
+    })]);
+    x.domain(data.map(function(d) {
+        return d.letter;
+    }));
+
+    // var svg = d3.selectAll(".graph") ;
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .style('fill', 'none')
+        .style('stroke', 'black')
+ ;
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .style('fill', 'none')
+        .style('stroke', 'black')
+ ;
+
+
+    var elements = svg.selectAll(".graphobjs")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("class", "graphobjs")
+        .attr("cx", d => { return x(d.letter) })
+        .attr("cy", d => { return y(d.frequency) } )
+        .attr("r", 5 )
+        .attr("fill", (d,i ) => { return color(i) })
+        .attr("id", (d,i ) => { return i })
+  ;
+
+});
+
+</script>
+
+</html>

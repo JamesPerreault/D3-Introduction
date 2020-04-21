@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Nested Historgram Logscale</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+var margin = {
+    top: 20,
+    right: 20,
+    bottom: 60,
+    left: 50
+},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+var y = d3.scaleBand()
+    .rangeRound([0, height] ,.2);
+
+var x = d3.scaleLog()
+    .range([0, width]) ;
+
+var yAxis = d3.axisLeft()
+    .scale(y)
+
+var xAxis = d3.axisBottom()
+    .scale(x) 
+    .ticks(3,"g") ;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom) 
+    .append("g") 
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")") ;
+
+d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom) 
+    .append("g") 
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var data_all
+
+d3.tsv("netflow.tsv", d3.autoType).then( function(data) {
+
+
+   data_all = data ;
+   var counts = d3.nest()
+      .key(function(d) {return d.proto + ":" + d.dport} )
+      .rollup(function(v) { return v.length; })
+      .entries(data); 
+ 
+    console.log(counts)
+  
+    x.domain([1, d3.max(counts, function(d) {
+        return d.value;
+    })]);
+    y.domain(counts.map(function(d) {
+        return d.key;
+    }));
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+     ;
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+
+    var elements = svg.selectAll(".graphobj")
+        .data(counts)
+        .enter()
+        .append("rect")
+        .attr("class", "graphobj")
+        .attr("y", function(d) {
+            return y(d.key);
+        })
+        .attr("height", y.bandwidth())
+        .attr("width", function(d) {
+            return x(d.value);
+        })
+        .attr("x", function(d) {
+            return 0;
+        })
+        .attr("fill", function(d, i) {
+            return color(i);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        }) ;
+
+});
+
+
+
+
+
+
+</script>
+
+</html>
