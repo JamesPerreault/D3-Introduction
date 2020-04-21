@@ -47,17 +47,14 @@ the results of one function call to another. This happens quite a bit
 when writing GUIs. Without chaining, code typically looks something like
 this:
 
+```javascript
 const myObject = new ClassIWrote()
-
 myObject.someMethod(
-
-myObject.someOtherMethod(
-
-myObject.yetAnotherMethod()
-
-)
-
-)
+                    myObject.someOtherMethod(
+                        myObject.yetAnotherMethod()
+                    )
+        )
+```
 
 While this example is pretty simple, it quickly gets ugly the more
 complicated the code gets. Also, the control flow is unintuitive. The
@@ -69,13 +66,12 @@ simplifies things. It does this by introducing a convention. Each
 function returns the object it is working on. This leads to code like
 this:
 
-myObject = new ClassIWrote().
-
-.someMethod()
-
-.someOtherMethod()
-
-.yetAnotherMethod()
+```javascript
+myObject = new ClassIWrote()
+                .someMethod()
+                .someOtherMethod()
+                .yetAnotherMethod()
+```
 
 Not only is this easier to look at, the control flow is as expected:
 someMethod() → someOtherMethod() → yetAnotherMethod() .
@@ -157,85 +153,76 @@ motivated by the clunky syntax that basic Javascript provides for
 styling objects. If you wanted to set the color of all the paragraphs in
 javascript, here is how that is done:
 
-*var paragraphs = document.getElementsByTagName("p");*
-
-*for (var i = 0; i &lt; paragraphs.length; i++) {*
-
-* var paragraph = paragraphs.item(i);*
-
-* paragraph.style.setProperty("color", "blue", null);*
-
-*}*
+```javascript
+var paragraphs = document.getElementsByTagName("p");
+for (var i = 0; i &lt; paragraphs.length; i++) {
+    var paragraph = paragraphs.item(i);
+    paragraph.style.setProperty("color", "blue", null);
+}
+```
 
 To do this in D3, this is done by:
 
-*d3.selectAll("p").style("color", "blue");*
-
+```javascript
+d3.selectAll("p").style("color", "blue");
+```
 All of the paragraphs are selected, and then updated using the style
 function. Note that this uses the function chaining idiom discussed
 above. The selectAll() function creates a selection, and the style
 function returns the same selection. This means that you can cascade
 style calls together:
 
-*d3.selectAll("p").style("color", "blue")*
+```javascript
+d3.selectAll("p").style("color", "blue")
+.style("fill", "blue");*
+```
 
-*.style("fill", "blue");*
-
-****
-
-**Note that each style operates on the whole selection, returning the
+Note that each style operates on the whole selection, returning the
 selection. And then the second style operates on the set of results from
-the first style. **D3’s **selections **classes have many methods that
+the first style. D3’s **selections** classes have many methods that
 operate similarly. However, some methods, such as **insert** creates new
 elements. These methods still return a selection, only the selection is
 different: the newly created elements. So it is common to see code like
-this:**
+this:
 
-*d3.selectAll("svg")*
+```javascript
+d3.selectAll("svg")
+    .style("background-color", "black");
+    .append("circle")
+    .attr("class", "dot")
+    .attr("r",3.5)
+    .append("title")
+    .text(“My title”) ;
+```
 
-*.style("background-color", "black");*
-
-* .append("circle")*
-
-* .attr("class", "dot")*
-
-* .attr("r",3.5)*
-
-* .append("title")*
-
-* .text(“My title”) ;*
-
-* *
-
-**First the SVG canvas is selected. First the style of the canvas is
+First the SVG canvas is selected. First the style of the canvas is
 changed, setting its background color. Then a circle is appened, and its
 attributes are set (class, and radius) . Then a title is appended to the
-circle, and it’s text attribute is set.**
+circle, and it’s text attribute is set.
 
-**Note that the first step was a select all on the SVG canvas. In the
+Note that the first step was a select all on the SVG canvas. In the
 common case, there is only one but there could be multiple. In that
 case, each one of those SVGs would be operated on, theirs style changed
 and the elements added to each. The end result is a selection containing
-title elements, one for each SVG element.**
+title elements, one for each SVG element.
 
-**At **the root of the document, there will typically be only one canvas
+At the root of the document, there will typically be only one canvas
 in your selection. But when working with data, the set of things
-selected and what elements are being operated on becomes important.**
+selected and what elements are being operated on becomes important.
 
-**The above examples all used the HTML element type as the selection
-criteria. D3 uses the standard HTML/**CSS **
-**[**select**](https://www.w3schools.com/css/css_selectors.asp)[**ors**](https://www.w3schools.com/css/css_selectors.asp)[**
-API**](https://www.w3schools.com/css/css_selectors.asp)**. Which means
-things can be selected by:**
+The above examples all used the HTML element type as the selection
+criteria. D3 uses the standard HTML/CSS
+[**selectors API**](https://www.w3schools.com/css/css_selectors.asp). Which means
+things can be selected by:
 
--   **element: **Elements of the specified HTML type** E.g. “svg”**
--   **class: **Elements with the specified class attribute** E.g.
-    “.**graph**” **
--   **id: **Elements with specified id attribute. Ids are unique to a
-    page, so they will only selected one element** E.g. “\#id”**
+-   element: Elements of the specified HTML type E.g. “svg”
+-   class: Elements with the specified class attribute E.g.
+    “.graph” 
+-   id: Elements with specified id attribute. Ids are unique to a
+    page, so they will only selected one element E.g. “\#id”
 
-**When inserting elements into a page, they are **often** given class
-names or ids so that they can be selected later in the code.**
+When inserting elements into a page, they are often given class
+names or ids so that they can be selected later in the code.
 
 Structure of D3 Programs
 ------------------------
@@ -267,9 +254,10 @@ range) and the limits of your data (the domain). The terminology comes
 from algebraic functions. The domain describes the input, the range the
 output. There is a method for specify each:
 
-*scale*.range()
-
-.domain()
+```javascript
+scale.range()
+     .domain()
+```
 
 There are different kinds of scales, depending on the type of data you
 have. Numeric data uses
@@ -295,14 +283,14 @@ and not a separate scale type.
 There seems to be a convention where the x axis scale is stored in the
 variable x and the y axis scale is stored in the variable y. E.g.
 
-var x = d3.scaleLinear()
+```javascript
 
- .range(\[0, width\] );
+var x = d3.scaleLinear()
+         .range(\[0, width\] );
 
 var y = d3.scaleLog()
-
- .range(\[height, 0\]);
-
+         .range(\[height, 0\]);
+```
 Again, these are defining functions that will be called when the graph
 is rendered. Width and height are variables defined elsewhere in the
 code. Their units are pixels.
@@ -319,7 +307,7 @@ data at the bottom of the screen, you specify a range of \[max,min\] .
 
 ### Axis
 
-D3 has utilities for creating functions that [drawthe x and y
+D3 has utilities for creating functions that [draw the x and y
 axis](https://github.com/d3/d3/blob/master/API.md#axes-d3-axis) on the
 screen. The functions are called generators. Note that their only
 function is to draw the axis line, tick marks, and associated labels.
