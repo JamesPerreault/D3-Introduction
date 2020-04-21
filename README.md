@@ -28,6 +28,18 @@ used. All of the examples in this document are done with D3 version 5.
 However, the file attachments include both the version 3 and version 5
 implementations for many of the visualizations
 
+Table Of Contents
+-----------------
+
+-   [Javascript Conventions](#javascript-conventions)
+-   [D3 Preliminaries](#d3-preliminarie)
+-   [Your First D3 Visualization](#your-first-d3-visualizatio)
+-   [Bar charts](#bar-charts])
+-   [Callbacks](#callbaks)
+-   [Additional utilities](#additional-utilitie)
+
+
+
 Javascript Conventions
 ======================
 
