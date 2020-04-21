@@ -286,10 +286,10 @@ variable x and the y axis scale is stored in the variable y. E.g.
 ```javascript
 
 var x = d3.scaleLinear()
-         .range(\[0, width\] );
+         .range([0, width] );
 
 var y = d3.scaleLog()
-         .range(\[height, 0\]);
+         .range([height, 0]);
 ```
 Again, these are defining functions that will be called when the graph
 is rendered. Width and height are variables defined elsewhere in the
@@ -328,13 +328,13 @@ code. In D3 version 5, the orientation is specified by the constructor:
 
 Here is an example:
 
+```javascript
 var yAxis = d3.axisLeft()
-
- .scale(y) ;
+              .scale(y) ;
 
 var xAxis = d3.axisBottom()
-
- .scale(x) ;
+              .scale(x) ;
+```
 
 Again, xAxis and yAxis are functions that will be called later, when the
 graph is rendered.
@@ -369,25 +369,20 @@ data. The new data selection is accessed with the *enter()* method. The
 empty elements are accessed with the *exit()* method. D3 code normally
 has three sections, to handle all three cases. E.g.
 
-*// Update existing*
+```javascript
+// Update existing
+var p = d3.select("body")
+ .selectAll("p")
+ .data([4, 8, 15, 16, 23, 42])
+ .text(function(d) { return d; });
 
-*var p = d3.select("body")*
+// Data needing new elements
+p.enter().append("p")
+ .text(function(d) { return d; });
 
-* .selectAll("p")*
-
-* .data(\[4, 8, 15, 16, 23, 42\])*
-
-* .text(function(d) { return d; });*
-
-*// Data needing new elements*
-
-*p.enter().append("p")*
-
-* .text(function(d) { return d; });*
-
-*// Old elements with no data*
-
-*p.exit().remove();*
+// Old elements with no data
+p.exit().remove();
+```
 
 The *text()* method sets the text value for all elements in the
 selection. While this example has all three sections, code using static
@@ -406,85 +401,69 @@ Scatterplot
 The starting point is a empty HTML document that loads D3. (Some online
 tutorials take a different approach, mixing D3 code with HTML markup.)
 
+```html
 &lt;!DOCTYPE html&gt;
-
 &lt;html&gt;
-
 &lt;head&gt;
-
  &lt;meta charset="utf-8"&gt;
-
  &lt;title&gt;Scatter plot D3 Version 5&lt;/title&gt;
-
  &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
-
 &lt;/head&gt;
-
 &lt;body&gt;
-
 &lt;/body&gt;
-
 &lt;/html&gt;
+```
 
 Next, we setup variables and the utility functions. We are defining a
 margin so that there is space to view the axis labels.
 
+```javascript
 var margin = {
-
  top: 20,
-
  right: 20,
-
  bottom: 30,
-
  left: 50
-
 },
 
  width = 600 - margin.left - margin.right,
-
  height = 300 - margin.top - margin.bottom;
 
 var x = d3.scalePoint()
-
- .range(\[0, width\] );
+          .range([0, width] );
 
 var y = d3.scaleLinear()
-
- .range(\[height, 0\]);
+          .range([height, 0]);
 
 var yAxis = d3.axisLeft()
-
- .scale(y) ;
+              .scale(y) ;
 
 var xAxis = d3.axisBottom()
-
- .scale(x) ;
+              .scale(x) ;
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
+```
 
 Next we instantiate the SVG canvas. The dimensions are set, and a
 subgroup is declared that is shifted by the margins. It is in this
 subgroup where the data will be rendered.
 
+```javascript
 var svg = d3.select("body").append(o"svg")
-
- .attr("width", width + margin.left + margin.right)
-
- .attr("height", height \* 1 + margin.top + margin.bottom)
-
- .append("g")
-
- .attr("class", "graph")
-
- .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height * 1 + margin.top + margin.bottom)
+            .append("g")
+            .attr("class", "graph")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 ;
+```
 
 The rest of the graph is rendered after we get data. Data can be
 retrieved using D3’s [fetch
 API](https://github.com/d3/d3/blob/master/API.md#fetches-d3-fetch):
 
+```javascript
 d3.tsv("data.tsv", d3.autoType ).then ( function( data) {} ) ;
+```
 
 This fetch method retrieves a tab separated values file. There are
 similar methods for retrieving CSVs, JSON files, other delimiters, and
@@ -509,87 +488,61 @@ the file. The body of the callback will be filled out below.
 
 First, set the domain of each scale:
 
- y.domain(\[0, d3.max(data, function(d) {
-
- return d.frequency;
-
- })\]);
+```javascript
+ y.domain([0, d3.max(data, function(d) {
+	 return d.frequency;
+ })]);
 
  x.domain(data.map(function(d) {
-
- return d.letter;
-
+	 return d.letter;
  }));
+```
 
 Next, use the canvas defined above (the translated portion) to add the x
 and y axis. Note that the X axis has been positioned at the bottom of
 the screen. Without that translation, it will be at the top of the
 screen (drawn at the origin). Some styling has been done on both lines.
 
+```javascript
  var svg = d3.selectAll(".graph") ;
-
  svg.append("g")
-
- .attr("transform", "translate(0," + height + ")")
-
- .call(xAxis)
-
- .style('fill', 'none')
-
- .style('stroke', '\#000')
-
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .style('fill', 'none')
+    .style('stroke', '#000')
  ;
 
  svg.append("g")
-
- .call(yAxis)
-
- .style('fill', 'none')
-
- .style('stroke', '\#000')
-
+    .call(yAxis)
+    .style('fill', 'none')
+    .style('stroke', '#000')
  ;
+```
 
 Now we are ready for binding to the data. As this is a static graph,
 only the *enter()* section is present:
 
+```javascript
 svg.selectAll(".graphobj")
-
- .data(data)
-
- .enter()
-
- .append("circle")
-
- .attr("class", "graphobj")
-
- .attr("cx", function(d) {
-
- return x(d.letter);
-
- })
-
- .attr("cy", function(d) {
-
- return y(d.frequency);
-
- })
-
- .attr("r", 5 )
-
- .attr("fill", function(d, i) {
-
- return color(i);
-
- })
-
- .attr("id", function(d, i) {
-
- return i;
-
- })
-
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("class", "graphobj")
+   .attr("cx", function(d) {
+       return x(d.letter);
+   })
+   .attr("cy", function(d) {
+       return y(d.frequency);
+   })
+   .attr("r", 5 )
+   .attr("fill", function(d, i) {
+       return color(i);
+   })
+   .attr("id", function(d, i) {
+       return i;
+   })
  ;
+```
 
 And there you have it, the data is graphed. For each data element, a
 [circle](https://www.w3schools.com/graphics/svg_circle.asp) is drawn. A
@@ -601,27 +554,19 @@ color scale, and here is a function of its index.
 One final note, I used the full function syntax here for clarity. There
 is an abbreviated syntax that could be used:
 
+```javascript
 svg.selectAll(".circle")
-
- .data(data)
-
- .enter()
-
- .append("circle")
-
- .attr("class", "circle")
-
- .attr("cx", d =&gt; { return x(d.letter) })
-
- .attr("cy", d =&gt; { return y(d.frequency) } )
-
- .attr("r", 5 )
-
- .attr("fill", (d,i ) =&gt; { return color(i) })
-
- .attr("id", (d,i ) =&gt; { return i })
-
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("class", "circle")
+   .attr("cx", d =&gt; { return x(d.letter) })
+   .attr("cy", d =&gt; { return y(d.frequency) } )
+   .attr("r", 5 )
+   .attr("fill", (d,i ) =&gt; { return color(i) })
+   .attr("id", (d,i ) =&gt; { return i })
  ;
+```
 
 Other primitives
 ----------------
@@ -636,34 +581,33 @@ using paths. We will be using the
 [line](https://github.com/d3/d3/blob/master/API.md#lines) shape. First,
 thse utilitiy functions have to be added to the initialization:
 
+```html
  &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
-
  &lt;script src="https://d3js.org/d3-path.v1.min.js"&gt;&lt;/script&gt;
-
  &lt;script src="https://d3js.org/d3-shape.v1.min.js"&gt;&lt;/script&gt;
+```
 
 The path element uses a series of directions to render the path. To
 create these directions, a function has to be defined that generates
 them from your data
 
+```javascript
 var line = d3.line()
-
- .x(function(d) { return x(d.letter); })
-
- .y(function(d) { return y(d.frequency); });
+             .x(function(d) { return x(d.letter); })
+             .y(function(d) { return y(d.frequency); });
+```
 
 Like scales and axis, this statement is returning a function. This
 definition can be located anywhere in the script. To take these
 directions and render the path, a path element has to be added to the
 canvas. This is done inside the data callback:
 
+```javascript
 svg.append("path")
-
- .attr("d", line(data))
-
- .attr("stroke", "black")
-
- .attr("fill", "none") ;
+   .attr("d", line(data))
+   .attr("stroke", "black")
+   .attr("fill", "none") ;
+```
 
 The path directions are specified using the d attribute, set by the
 output of the function that has been defined. The fill and stroke
@@ -672,7 +616,9 @@ attributes are set as the defaults have the path filled in.
 The *line()* function computes a path over the whole data. Run it
 manually on the data, and you should see something like this:
 
+```javascript
 "M5,89.25759722878284L25,220.63454574082823L45,195.2448433317588L65,166.29270980947882L85,0L105,204.96772161864274L125,210.34089119823648L145,130.0582585419619L165,112.89560699102502L185,246.98866320264526L205,234.80554243426232L225,170.78019209573296L245,202.6452527161077L265,117.16658793890727L285,102.24767753109745L305,212.0335380255078L325,248.13021571406077L345,132.16422610612503L365,125.47236655644778L385,71.76035270036213L405,195.71720988820655L425,230.75106282475198L445,203.5506219492993L465,247.04770902220122L485,211.14785073216817L505,248.54353645095262"
+```
 
 Bar Graphs
 ==========
@@ -683,38 +629,31 @@ the scatterplot visualization will turn it into a bar graph.
 
 Start with a similiar skeleton HTML document:
 
+```html
 &lt;!DOCTYPE html&gt;
-
 &lt;html&gt;
-
 &lt;head&gt;
-
  &lt;meta charset="utf-8"&gt;
-
  &lt;title&gt;Bar Chart&lt;/title&gt;
-
  &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
-
 &lt;/head&gt;
-
 &lt;body&gt;
-
 &lt;/body&gt;
-
 &lt;/html&gt;
+```
 
 As before, this first step is to define the scales. The linear scale
 stays the same, but the ordinal scale is changed from *scalePoint()* to
 *scaleBand()*. For this example, I am switching the x and y axes. The
 letters will be plotted on the y axis, and the frequencies on the x.
 
+```javascript
 var y = d3.scaleBand()
-
- .rangeRound(\[0, height\] );
+          .rangeRound([0, height] );
 
 var x = d3.scaleLinear()
-
- .range(\[0, width\]);
+          .range([0, width]);
+```
 
 Both *scalePoint()* and *scaleBand()* are ordinal scale functions that
 place categorical data evenly across the axis. The difference is that
@@ -730,45 +669,28 @@ SVG element used is a
 [rectangle](https://www.w3schools.com/graphics/svg_rect.asp) (**rect**).
 Here is the code:
 
+```javascript
  var elements = svg.selectAll(".graphobj")
-
- .data(data)
-
- .enter()
-
- .append("rect")
-
- .attr("class", "graphobj")
-
- .attr("y", function(d) {
-
- return y(d.letter);
-
- })
-
- .attr("height", y.bandwidth())
-
- .attr("x", 0)
-
- .attr("width", function(d) {
-
- return x(d.frequency);
-
- })
-
- .attr("fill", function(d, i) {
-
- return color(i);
-
- })
-
- .attr("id", function(d, i) {
-
- return i;
-
- })
-
+     .data(data)
+     .enter()
+     .append("rect")
+     .attr("class", "graphobj")
+     .attr("y", function(d) {
+         return y(d.letter);
+     })
+     .attr("height", y.bandwidth())
+     .attr("x", 0)
+     .attr("width", function(d) {
+         return x(d.frequency);
+     })
+     .attr("fill", function(d, i) {
+         return color(i);
+     })
+     .attr("id", function(d, i) {
+         return i;
+     })
  ;
+```
 
 As with the scatterplot, the x and y locations are set. The x location
 is 0, because the rectangle starts at the left edge of the plot. Recall
@@ -794,19 +716,20 @@ method. Here is an example, using [network flow
 data](https://www.auvik.com/franklymsp/blog/netflow-basics/) (the data
 has been filtered so that only client to server records are present):
 
+```javascript
 d3.nest()
-
- .key(function(d) {return d.proto + ":" + d.dport} ) ;
+  .key(function(d) {return d.proto + ":" + d.dport} ) ;
+```
 
 Note that the key is not one of the original columns, but a new value
 derived from them. To apply the nest object to the data, use the
 *entries()* method. E.g.
 
+```javascript
 d3.nest()
-
- .key(function(d) {return d.proto + ":" + d.dport} )
-
- .entries(data);
+  .key(function(d) {return d.proto + ":" + d.dport} )
+  .entries(data);
+```
 
 At this point, no aggregation is done. The output is then an array
 containing the original objects grouped by the key value. E.g.
@@ -817,13 +740,12 @@ To do an aggregation, the *rollup()* method is used. It specifies an
 aggregation function. Here is an example where a count aggregation is
 done:
 
+```javascript
 var counts = d3.nest()
-
- .key(function(d) {return d.proto + ":" + d.sport} )
-
- .rollup(function(v) { return v.length; })
-
- .entries(data);
+    .key(function(d) {return d.proto + ":" + d.sport} )
+    .rollup(function(v) { return v.length; })
+    .entries(data);
+```
 
 The result is another array, but with the aggregated values:
 
@@ -832,88 +754,70 @@ The result is another array, but with the aggregated values:
 With this aggregation, a bar chart can be drawn. First, each scale’s
 domain has to be set:
 
- x.domain(\[0, d3.max(counts, function(d) {
-
- return d.value;
-
- })\]);
+```javascript
+ x.domain([0, d3.max(counts, function(d) {
+    return d.value;
+ })]);
 
  y.domain(counts.map(function(d) {
-
- return d.key;
-
+    return d.key;
  }));
+```
+```
 
 Here we are using Javascript’s *array.*map() function to get an array of
 keys. Now the bars can be rendered:
 
+```javascript
  var elements = svg.selectAll(".graphobj")
-
- .data(counts)
-
- .enter()
-
- .append("rect")
-
- .attr("class", "graphobj")
-
- .attr("y", function(d) {
-
- return y(d.key);
-
- })
-
- .attr("height", y.rangeBand())
-
- .attr("width", function(d) {
-
- return x(d.value);
-
- })
-
- .attr("x", function(d) {
-
- return 0;
-
- })
-
- .attr("fill", function(d, i) {
-
- return color(i);
-
- })
-
- .attr("id", function(d, i) {
-
- return i;
-
- })
+     .data(counts)
+     .enter()
+     .append("rect")
+     .attr("class", "graphobj")
+     .attr("y", function(d) {
+         return y(d.key);
+     })
+     .attr("height", y.rangeBand())
+     .attr("width", function(d) {
+         return x(d.value);
+     })
+     .attr("x", function(d) {
+         return 0;
+     })
+     .attr("fill", function(d, i) {
+         return color(i);
+     })
+     .attr("id", function(d, i) {
+         return i;
+     })
+```
 
 Because of the skewness of the data, it is best visualized at log scale.
 First, change the scale:
 
+```javascript
 var x = d3.scaleLog()
-
- .range(\[0, width\]);
+    .range([0, width]);
+```
 
 You also need to change the domain, as log plots the domain start at 1,
 not 0:
 
- x.domain(\[1, d3.max(counts, function(d) {
-
- return d.value;
-
- })\]);
+```javascript
+ x.domain([1, d3.max(counts, function(d) {
+    return d.value;
+ })]);
+```
 
 While not strictly necessary, the graph will be easier to read if you
 explicitly define the tick label formatting. By default, exponentials
 are displayed which I find hard to interpret:
 
+```javascript
 var xAxis = d3.axisBottom()
-
- .scale(x)
-
- .ticks(3,"g") ;
+    .scale(x)
+    .ticks(3,"g") ;
+```
 
 Stacked Bar Charts
 ------------------
@@ -921,15 +825,13 @@ Stacked Bar Charts
 Multiple levels of nesting can be defined by specifying multiple keys.
 E.g.
 
+```javascript
 var nested = d3.nest()
-
- .key(function(d) {return d.proto + ":" + d.sport} )
-
- .key(function(d) {return d.sip} )
-
- .rollup(function(v) { return v.length; })
-
- .entries(data);
+    .key(function(d) {return d.proto + ":" + d.sport} )
+    .key(function(d) {return d.sip} )
+    .rollup(function(v) { return v.length; })
+    .entries(data);
+```
 
 This kind of structure can be visualized using a stacked bar chart. D3
 does have a helper function,
@@ -939,93 +841,62 @@ filled out) two dimensional array as its input, and not a nested
 structure. But it is not hard to write a function that takes *nest()*’s
 output and turns it into a stack:
 
+```javascript
 function nestToStack(nest) {
-
- var stacked = \[\] ;
-
- nest.forEach( function(d) {
-
- var x0 = 0 ;
-
- d.values.forEach( function(f) {
-
- var obj = { y: d.key } ;
-
- obj.x = \[ x0, x0+ f.value \] ;
-
- x0 += f.value ;
-
- obj.label = f.key ;
-
- stacked.push(obj) ;
-
- } ) ;
-
- } );
-
- return stacked ;
-
+    var stacked = [] ;
+    nest.forEach( function(d) {
+       var x0 = 0 ;
+       d.values.forEach( function(f) {
+          var obj = { y: d.key } ;
+          obj.x = [ x0, x0+ f.value ] ;
+          x0 += f.value ;
+          obj.label = f.key ;
+          stacked.push(obj) ;
+       } ) ;
+    } );
+    return stacked ;
 }
+```
 
 With this utility, we can stack our nested data and set the domains:
 
+```javascript
  var counts = nestToStack(nested) ;
 
- x.domain(\[0, d3.max(counts, function(d) {
-
- return d.x\[1\];
-
- })\]);
+ x.domain([0, d3.max(counts, function(d) {
+    return d.x[1];
+ })]);
 
  y.domain(counts.map(function(d) {
-
- return d.y;
-
+    return d.y;
  }));
+```
 
 Now we are ready to render the graph:
 
+```javascript
  var elements = svg.selectAll(".graphobj")
-
- .data(counts)
-
- .enter()
-
- .append("rect")
-
- .attr("class", "graphobj")
-
- .attr("y", function(d) {
-
- return y(d.y);
-
- })
-
- .attr("height", y.bandwidth())
-
- .attr("width", function(d) {
-
- return x(d.x\[1\])-x(d.x\[0\]);
-
- })
-
- .attr("x", function(d) {
-
- return x(d.x\[0\]);
-
- })
-
- .attr("fill", function(d, i) {
-
- return color(d.label);
-
- })
-
- .attr("id", function(d, i) {
-
- return i;
-
+     .data(counts)
+     .enter()
+     .append("rect")
+     .attr("class", "graphobj")
+     .attr("y", function(d) {
+         return y(d.y);
+     })
+     .attr("height", y.bandwidth())
+     .attr("width", function(d) {
+         return x(d.x[1])-x(d.x[0]);
+     })
+     .attr("x", function(d) {
+         return x(d.x[0]);
+     })
+     .attr("fill", function(d, i) {
+         return color(d.label);
+     })
+     .attr("id", function(d, i) {
+     return i;
  }) ;
+```
 
 This chart is still skewed, but it is not appropriate to display a
 stacked chart at log scale.
@@ -1050,101 +921,74 @@ mouse is over. The *if* statement in the **mouseout** is there so that
 the code will work with the nested graph. In all the other examples, the
 color is set by the id.
 
+```javascript
 d3.selectAll(“.graphobj”)
-
- .on("mouseover", function(d) {
-
- d3.select(this)
-
- .attr("fill", "red");
-
- })
-
- .on("mouseout", function(d, i) {
-
- d3.select(this).attr("fill", function() {
-
- var fill ;
-
- if (‘ylabel’ in d) {
-
- fill = color(d.ylabel)
-
- }
-
- else {
-
- fill = color(this.id)
-
- }
-
- return fill ;
-
- });
+    .on("mouseover", function(d) {
+       d3.select(this)
+          .attr("fill", "red");
+    })
+    .on("mouseout", function(d, i) {
+       d3.select(this).attr("fill", function() {
+          var fill ;
+          if (‘ylabel’ in d) {
+             fill = color(d.ylabel)
+          }
+          else {
+             fill = color(this.id)
+          }
+          return fill ;
+       })
+    });
+```
 
 It is possible to attach a callback to the canvas. You do have to make
 sure that it is attached to the SVG object, and not the translated
-version of it:
+version of it.
 
 E.g.:
 
-function my\_callback() { alert(“Clicked on canvas”) }
+```javascript
+function my_callback() { alert(“Clicked on canvas”) }
 
 var svg = d3.select("body").append("svg")
-
- .attr("width", width + margin.left + margin.right)
-
- .attr("height", height \* 1 + margin.top + margin.bottom)
-
- .on("click", my\_callback)
-
- .append("g")
-
- .attr("class", "graph")
-
- .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height * 1 + margin.top + margin.bottom)
+    .on("click", my_callback)
+    .append("g")
+    .attr("class", "graph")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 ;
+```
 
 D3 has a method for getting the mouse coordinates on the canvas, which
 will be in pixels. Before you can map it back to your data, you do have
 to account for the shifting:
 
-function my\_callback () {
-
- var coordinates= d3.mouse(this);
-
- var yval = y.invert(coordinates\[1\]-margin.top) ;
-
- alert(
-
- "y " + yval +
-
- "\\ncanvas: " + coordinates\[0\] + "," + coordinates\[1\] +
-
-) ;
-
+```javascript
+function my_callback () {
+    var coordinates= d3.mouse(this);
+    var yval = y.invert(coordinates[1]-margin.top) ;
+    alert(
+       "y " + yval +
+       "\ncanvas: " + coordinates[0] + "," + coordinates[1] +
+    ) ;
  }
+```
 
 You can also get the mouse position on the page. Here is how that is
 done:
 
-function my\_callback () {
-
- var coordinates= d3.mouse(this);
-
- var yval = y.invert(coordinates\[1\]-margin.top) ;
-
- alert(
-
- "y " + yval +
-
- "\\ncanvas: " + coordinates\[0\] + "," + coordinates\[1\] +
-
- "\\npage = " + d3.event.pageX +"," + d3.event.pageY
-
-) ;
-
+```javascript
+function my_callback () {
+    var coordinates= d3.mouse(this);
+    var yval = y.invert(coordinates[1]-margin.top) ;
+    alert(
+       "y " + yval +
+       "\ncanvas: " + coordinates[0] + "," + coordinates[1] +
+       "\npage = " + d3.event.pageX +"," + d3.event.pageY
+    ) ;
  }
+```
 
 The page location can be used to create tooltips using HTML page
 elements. See [Simple d3.js tooltips –
