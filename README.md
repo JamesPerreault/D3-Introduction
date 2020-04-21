@@ -32,11 +32,11 @@ Table Of Contents
 -----------------
 
 -   [Javascript Conventions](#javascript-conventions)
--   [D3 Preliminaries](#d3-preliminarie)
--   [Your First D3 Visualization](#your-first-d3-visualizatio)
+-   [D3 Preliminaries](#d3-preliminaries)
+-   [Your First D3 Visualization](#your-first-d3-visualization)
 -   [Bar charts](#bar-charts])
--   [Callbacks](#callbaks)
--   [Additional utilities](#additional-utilitie)
+-   [Callbacks](#callbacks)
+-   [Additional utilities](#additional-utilities)
 
 
 
@@ -635,7 +635,7 @@ manually on the data, and you should see something like this:
 "M5,89.25759722878284L25,220.63454574082823L45,195.2448433317588L65,166.29270980947882L85,0L105,204.96772161864274L125,210.34089119823648L145,130.0582585419619L165,112.89560699102502L185,246.98866320264526L205,234.80554243426232L225,170.78019209573296L245,202.6452527161077L265,117.16658793890727L285,102.24767753109745L305,212.0335380255078L325,248.13021571406077L345,132.16422610612503L365,125.47236655644778L385,71.76035270036213L405,195.71720988820655L425,230.75106282475198L445,203.5506219492993L465,247.04770902220122L485,211.14785073216817L505,248.54353645095262"
 ```
 
-Bar Graphs
+Bar charts
 ==========
 
 Scatterplots and line graphs are not the only type of visualization that
