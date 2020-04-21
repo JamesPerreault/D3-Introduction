@@ -155,7 +155,7 @@ javascript, here is how that is done:
 
 ```javascript
 var paragraphs = document.getElementsByTagName("p");
-for (var i = 0; i &lt; paragraphs.length; i++) {
+for (var i = 0; i < paragraphs.length; i++) {
     var paragraph = paragraphs.item(i);
     paragraph.style.setProperty("color", "blue", null);
 }
@@ -563,11 +563,11 @@ svg.selectAll(".circle")
    .enter()
    .append("circle")
    .attr("class", "circle")
-   .attr("cx", d =&gt; { return x(d.letter) })
-   .attr("cy", d =&gt; { return y(d.frequency) } )
+   .attr("cx", d => { return x(d.letter) })
+   .attr("cy", d => { return y(d.frequency) } )
    .attr("r", 5 )
-   .attr("fill", (d,i ) =&gt; { return color(i) })
-   .attr("id", (d,i ) =&gt; { return i })
+   .attr("fill", (d,i ) => { return color(i) })
+   .attr("id", (d,i ) => { return i })
  ;
 ```
 
@@ -585,9 +585,9 @@ using paths. We will be using the
 thse utilitiy functions have to be added to the initialization:
 
 ```html
- &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
- &lt;script src="https://d3js.org/d3-path.v1.min.js"&gt;&lt;/script&gt;
- &lt;script src="https://d3js.org/d3-shape.v1.min.js"&gt;&lt;/script&gt;
+ <script src="https://d3js.org/d3.v5.min.js"></script>
+ <script src="https://d3js.org/d3-path.v1.min.js"></script>
+ <script src="https://d3js.org/d3-shape.v1.min.js"></script>
 ```
 
 The path element uses a series of directions to render the path. To
