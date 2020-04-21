@@ -402,16 +402,19 @@ The starting point is a empty HTML document that loads D3. (Some online
 tutorials take a different approach, mixing D3 code with HTML markup.)
 
 ```html
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
- &lt;meta charset="utf-8"&gt;
- &lt;title&gt;Scatter plot D3 Version 5&lt;/title&gt;
- &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Scatter plot D3 version 5</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+
+</body>
+</html>;
 ```
 
 Next, we setup variables and the utility functions. We are defining a
@@ -630,16 +633,19 @@ the scatterplot visualization will turn it into a bar graph.
 Start with a similiar skeleton HTML document:
 
 ```html
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
- &lt;meta charset="utf-8"&gt;
- &lt;title&gt;Bar Chart&lt;/title&gt;
- &lt;script src="https://d3js.org/d3.v5.min.js"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Bar Chart D3 version 5</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+
+</body>
+</html>;
 ```
 
 As before, this first step is to define the scales. The linear scale
