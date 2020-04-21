@@ -740,7 +740,23 @@ d3.nest()
 At this point, no aggregation is done. The output is then an array
 containing the original objects grouped by the key value. E.g.
 
-\(6) \[…\]
+```javascript
+(6) […]
+	0: {…}
+		key: "UDP:5353"
+		values: (9) […]
+			0: Object { sip: "192.168.1.171", dip: "224.0.0.251", … }
+			1: Object { sip: "192.168.1.171", dip: "224.0.0.251", … }
+			...
+			8: Object { sip: "192.168.1.171", dip: "224.0.0.251", … }
+		length: 9
+	1: Object { key: "UDP:1900", values: (28) […] }
+	2: Object { key: "UDP:53", values: (109) […] }
+	3: Object { key: "TCP:80", values: (169) […] }
+	4: Object { key: "TCP:443", values: (2266) […] }
+	5: Object { key: "IGMP:0", values: (4) […] }
+length: 6
+```
 
 To do an aggregation, the *rollup()* method is used. It specifies an
 aggregation function. Here is an example where a count aggregation is
@@ -755,7 +771,16 @@ var counts = d3.nest()
 
 The result is another array, but with the aggregated values:
 
-\(6) \[…\]
+```javascript
+(6) […]
+	0: Object { key: "UDP:5353", value: 9 }
+	1: Object { key: "UDP:1900", value: 28 }
+	2: Object { key: "UDP:53", value: 109 }
+	3: Object { key: "TCP:80", value: 169 }
+	4: Object { key: "TCP:443", value: 2266 }
+	5: Object { key: "IGMP:0", value: 4 }
+length: 6
+```
 
 With this aggregation, a bar chart can be drawn. First, each scale’s
 domain has to be set:
@@ -769,7 +794,7 @@ domain has to be set:
     return d.key;
  }));
 ```
-```
+
 
 Here we are using Javascript’s *array.*map() function to get an array of
 keys. Now the bars can be rendered:
