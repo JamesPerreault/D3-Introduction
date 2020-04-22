@@ -564,7 +564,13 @@ And there you have it, the data is graphed. For each data element, a
 circle is an SVG element defined in the HTML/SVG specification. The
 scale functions defined earlier (*x* and *y*) are used to get the x and
 y coordinates of each data item. The color of each item is set using a
-color scale, and here is a function of its index.
+color scale, and here is a function of its index. Full code is here:
+
+- [Example 1: scatterplot D3 version 5](example_code/example1-scatter-v5.html)
+- [Example 1: scatterplot D3 version 3](example_code/example1-scatter-v3.html)
+
+![example](images/scatterplot.png)
+
 
 One final note, I used the full function syntax here for clarity. There
 is an abbreviated syntax that could be used:
@@ -634,6 +640,10 @@ manually on the data, and you should see something like this:
 ```javascript
 "M5,89.25759722878284L25,220.63454574082823L45,195.2448433317588L65,166.29270980947882L85,0L105,204.96772161864274L125,210.34089119823648L145,130.0582585419619L165,112.89560699102502L185,246.98866320264526L205,234.80554243426232L225,170.78019209573296L245,202.6452527161077L265,117.16658793890727L285,102.24767753109745L305,212.0335380255078L325,248.13021571406077L345,132.16422610612503L365,125.47236655644778L385,71.76035270036213L405,195.71720988820655L425,230.75106282475198L445,203.5506219492993L465,247.04770902220122L485,211.14785073216817L505,248.54353645095262"
 ```
+Full code is at [Example 1 scatterplot with lines](example_code/example1-scatter-v5-lines.html)
+
+![example](images/scatterplot-lines.png)
+
 
 Bar charts
 ==========
@@ -719,9 +729,18 @@ The width is the length of the bar, which is the frequency scaled to
 pixel values, returned by calling the linear scale function previously
 defined. The fill and id attribute code is unchanged.
 
+Full code is at:
+
+- [Example 2: bar chart D3 version 5](example_code/example2-barchart-v5.html)
+- [Example 2: bar chart D3 version 3](example_code/example2-barchart-v3.html)
+
+![example](images/barchart.png)
+
+
 A good excerise to do at this point would be to switch the x and y axis
 on this bar graph. This will give you a good feel for how scales work
 and how they interact with your data.
+
 
 Grouping data
 -------------
@@ -834,6 +853,11 @@ keys. Now the bars can be rendered:
          return i;
      })
 ```
+Full code is at [Example 3: nest bars](example_code/example3-nested-bars.html).
+
+
+![example](images/barchart-nested.png)
+
 
 Because of the skewness of the data, it is best visualized at log scale.
 First, change the scale:
@@ -861,6 +885,10 @@ var xAxis = d3.axisBottom()
     .scale(x)
     .ticks(3,"g") ;
 ```
+Full code is at [Example 3:nested bars log scale](example_code/example3-nested-bars-logscale.html)
+
+![example](images/barchart-nested-log.png)
+
 
 Stacked Bar Charts
 ------------------
@@ -940,6 +968,10 @@ Now we are ready to render the graph:
      return i;
  }) ;
 ```
+Full code is at [Example 4: stacked and nested bars](example_code/example4-stacked-nested-bars.html)
+
+
+![example](images/barchart-nested-stacked.png)
 
 This chart is still skewed, but it is not appropriate to display a
 stacked chart at log scale.
@@ -1037,6 +1069,10 @@ The page location can be used to create tooltips using HTML page
 elements. See [Simple d3.js tooltips –
 bl.ocks.org](https://bl.ocks.org/d3noob/a22c42db65eb00d4e369) for an
 example.
+
+Full code is at [Example 5: Scatterplot with callbacks](example_code/example5-scatter-callbacks-v5.html)
+
+
 
 Additional utilities
 ====================
