@@ -89,10 +89,6 @@ d3.tsv("data.tsv", d3.autoType, function(error, data) {
 
 });
 
-var line = d3.line()
-    .x(function(d) { return x(d.letter); })
-    .y(function(d) { return y(d.frequency); });
-
 </script>
 
 </html>
