@@ -156,7 +156,7 @@ D3 builds upon it.
 Selections: D3 and the DOM
 --------------------------
 
-A fundamental part of D3 is how it interacts to the DOM. It uses a
+A fundamental part of D3 is how it interacts with the DOM. It uses a
 series of classes called
 [*selections*](https://github.com/d3/d3/blob/master/API.md#selections-d3-selection),
 where a group of objects are selected by some tag and operated on in
@@ -208,7 +208,7 @@ d3.selectAll("svg")
 ```
 
 First the SVG canvas is selected. First the style of the canvas is
-changed, setting its background color. Then a circle is appened, and its
+changed, setting its background color. Then a circle is appended, and its
 attributes are set (class, and radius) . Then a title is appended to the
 circle, and it’s text attribute is set.
 
@@ -261,10 +261,10 @@ are another fundamental D3 building block. They are functions that
 convert your data into the X or Y location, in pixels, on the screen.
 
 Two scales have to be defined, one for the x direction and one for the y
-direction. For each one you have to specify the size of the screen (the
-range) and the limits of your data (the domain). The terminology comes
-from algebraic functions. The domain describes the input, the range the
-output. There is a method for specify each:
+direction. For each one you have to specify the size of the space you want 
+it to occupy on the screen (the "range") and the limits of your data (the "domain").
+The terminology comes from algebraic functions. The domain describes the input, 
+the range the output. There is a method for specifying each:
 
 ```javascript
 scale.range()
@@ -308,8 +308,8 @@ is rendered. Width and height are variables defined elsewhere in the
 code. Their units are pixels.
 
 When plotting to the screen, it is important to know where the origin
-point ( x=0, y=0) is. It is the top left part of the screen. For the x
-direction, increasing numbers go from left to right. For y, top to
+point ( x=0, y=0) is. It is the top left corner of the screen. For the x
+direction, numbers increase as you move from left to right. For y, as you move top to
 bottom. So when you specify a range of \[ min, max\], you are saying
 that you want the minimum value at pixel 0 and the maximal value at the
 maximum pixel (width or height). That is fine for the x-axis, but not
@@ -354,7 +354,7 @@ graph is rendered.
 Data binding
 ------------
 
-There are two types of objects D3 programs have to deal with. The
+There are two types of objects D3 programs have to deal with: the
 graphical DOM elements and the data to be visualized. When visualizing,
 the two types of objects are bound together. Data is bound to a
 *selection *using the
@@ -375,8 +375,8 @@ data is bound to a selection of elements, there are three scenarios:
 -   elements that no longer have data associated with them
 
 The selection returned by *data()* is the preexisting elements that
-already had data and need to be updated. It also contains to
-sub-selections, one for the new data and one of the elements with no
+already had data and need to be updated. It also contains two
+sub-selections, one for the new data and one for the elements with no
 data. The new data selection is accessed with the *enter()* method. The
 empty elements are accessed with the *exit()* method. D3 code normally
 has three sections, to handle all three cases. E.g.
@@ -410,7 +410,7 @@ visualization.
 Scatterplot
 -----------
 
-The starting point is a empty HTML document that loads D3. (Some online
+The starting point is an empty HTML document that loads D3. (Some online
 tutorials take a different approach, mixing D3 code with HTML markup.)
 
 ```html
@@ -482,8 +482,9 @@ d3.tsv("data.tsv", d3.autoType ).then ( function( data) {} ) ;
 
 This fetch method retrieves a tab separated values file. There are
 similar methods for retrieving CSVs, JSON files, other delimiters, and
-opaque blobs. The first parameter is the file to retrieve, a relative or
-full URL. The second parameter is called on each line (row) that is
+opaque blobs. The first parameter is the file to retrieve- a relative or
+full URL. The second parameter is a row conversion fuction that is called
+on each line (row) that is
 received, determining the data type of each column. Here I am using a D3
 utility *autoType()* . Finally, a function is called on the entire data.
 This is done using Javascript Promise API (in recent versions ; in
@@ -499,7 +500,7 @@ for more details.
 
 The data passed to the callback function is an Array of objects, one
 object for each line. Each object has an attribute for each column in
-the file. The body of the callback will be filled out below.
+the file. Here’s what goes in the body of the callback: 
 
 First, set the domain of each scale:
 
@@ -600,7 +601,7 @@ utility functions for rendering
 [shapes](https://github.com/d3/d3/blob/master/API.md#shapes-d3-shape)
 using paths. We will be using the
 [line](https://github.com/d3/d3/blob/master/API.md#lines) shape. First,
-thse utilitiy functions have to be added to the initialization:
+these utility functions have to be added to the initialization:
 
 ```html
  <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -618,7 +619,7 @@ var line = d3.line()
              .y(function(d) { return y(d.frequency); });
 ```
 
-Like scales and axis, this statement is returning a function. This
+Like scales and axes, this statement is returning a function. This
 definition can be located anywhere in the script. To take these
 directions and render the path, a path element has to be added to the
 canvas. This is done inside the data callback:
